@@ -1,0 +1,53 @@
+<!-- This is where the user's profile page is placed -->
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="profilePageStartingDiv">
+    <div class="justify-content-center text-center profile2ndMainDiv">
+        <h1 class="redText pt-5"> 
+           Your Profile page <i class="fa-solid fa-user"></i>
+        </h1>
+
+        <div class="profileDetailsDiv text-start ">
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    <i class="fa-solid fa-circle-user"></i>
+                    Username: 
+                </span>
+                
+                {{ username }}
+
+            </h3>
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    <i class="fa-solid fa-square-envelope"></i>
+                    Email: 
+                </span>
+                {{ loggedInUser.email }}
+            </h3>
+            
+        </div>
+
+        <div class="text-center mt-4 pt-5 profileButtonsRowDiv">
+            <a href="{% url 'update_profile' %}" class="btn profileFirstBtn ">
+                Edit Profile
+            </a>
+
+            <a href="{% url 'homepage' %}" class="btn profileSecondBtn ">
+                Back
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,52 @@
+<!-- The main page that the user first enters -->
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-5 pb-5 text-center startingPageDiv">
+    <h1 class="startingPageTitle">Where your identities feel safe and secure</h1>
+
+    <!-- Buttons Row of buttons-->
+    <div class="container mt-5 d-none d-md-block">
+        <div class="row justify-content-center">
+
+            <!-- Sign Up -->
+            <div class="col-md-6 text-center">
+                <h4>Don't have an account?</h4>
+                <a href="{% url 'sign-up' %}"
+                    class="btn SignUpBtn testBtn mt-3">
+                        SIGN UP NOW!
+                </a>
+            </div>
+
+            <!-- Login -->
+            <div class="col-md-6 text-center">
+                <h4>Already have an account?</h4>
+                <a href="{% url 'login' %}"
+                    class="btn LoginBtn testBtn mt-3">
+                        LOGIN
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Sign Up Button (Visible only on mobile) -->
+    <div class="row d-md-none mt-3">
+        <div class="col text-center">
+            <h4>Don't have an account?</h4>
+            <a href="{% url 'sign-up' %}" class="btn SignUpBtn">SIGN UP NOW!</a>
+        </div>
+    </div>
+
+    <!-- Login Button (Visible only on mobile) -->
+    <div class="row d-md-none mt-3">
+        <div class="col text-center">
+            <h4>Already have an account?</h4>
+            <a href="{% url 'login' %}" class="btn LoginBtn">LOGIN</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

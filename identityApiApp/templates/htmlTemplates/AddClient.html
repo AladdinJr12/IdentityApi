@@ -1,0 +1,64 @@
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid formSect align-items-center d-flex justify-content-center pb-5">
+    <div class="card formCard text-center mt-5 pb-5" >
+        <div class="card-body ">
+            <h1 class="pb-3"> 
+                Add in a custom client setting
+            </h1>
+            <ul class="identitiesHelpTex addClientHelpText">
+                The client that you entered will only be able to retrieve the identity you set it for.
+            </ul>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+              
+                {% if client_form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {% for error in client_form.non_field_errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}                
+            
+                {% for client_field in client_form %}
+                    <div>
+
+                        {% if client_field.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {% for error in client_field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <label class="form-label fw-semibold pb-1 d-block pt-1">
+                            {{ client_field.label }}
+                        </label>
+                        
+                        
+                        <div class="position-relative pb-3">
+                                {{ client_field }}
+                        </div>
+
+                            
+
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="genericButton mt-4"> Add Custom Client Settings </button>
+
+            </form>
+            
+        </div>
+
+    </div>
+        
+</div>
+
+{% endblock %}
+

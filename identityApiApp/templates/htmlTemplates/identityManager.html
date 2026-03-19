@@ -1,0 +1,87 @@
+<!-- This is the page for the user to manage/view all of their created identities -->
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+
+<div class="justify-content-center text-center">
+    <div class="container-fluid mt-5 pb-5 text-center ">
+        <h1 class="genericTitle"> All of your identities  </h1>
+        <ul class="identitiesHelpText">
+            The identities that are yellow and have a star beside them are prioritized identities 
+        </ul>
+    </div>
+
+    <!-- Alert for being redirected here-->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert 
+                {% if 'success' in message.tags %}
+                    alert-success
+                {% else %}
+                    alert-danger
+                {% endif %}
+                    alertMessage" 
+                    role="alert">
+                        {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% for context_name, identities in grouped_identities.items %}
+
+    <h2 class="contextHeader pt-3"> {{context_name}} </h2>
+
+    <div class="table-responsive ">
+        <table class="table table-striped table-bordered table-dark mt-4 identitiesTable">
+            <thead class="thead-dark">
+                <tr >
+                    <th scope="col" class="text-center align-middle">#</th>
+                    <th scope="col" class="text-center align-middle">Identity name </th>
+                    <th scope="col" class="text-center align-middle"> Security level </th>
+                    <th scope="col" class="text-center align-middle"> Visibility</th>
+                    <th scope="col" class="text-center align-middle"> </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for identity in identities %}
+                    <!-- the prioritized identity will have the class "priorityIdentity" -->
+                    <tr>
+                        <td class="text-center align-middle {% if identity.is_priority %} priorityIdentity {% endif %}" >{{ forloop.counter }}</td>
+                        <td class="text-center align-middle {% if identity.is_priority %} priorityIdentity {% endif %}">
+                            {% if identity.is_priority %}
+                                <i class="fa-solid fa-star priorityIdentityStar"></i> 
+                                {{ identity.identity_name }}
+                            {% else %}
+                                {{ identity.identity_name }}
+                            {% endif %}
+                        </td>
+                        <td class="text-center align-middle {% if identity.is_priority %} priorityIdentity {% endif %}">{{ identity.security_level }}</td>
+                        <td class="text-center align-middle {% if identity.is_priority %} priorityIdentity {% endif %}">{{ identity.visibility }}</td>
+                        <td class="text-center align-middle"> 
+                            <a href="{% url 'identity_view' identity.id %}" 
+                                class="btn ViewIdentityBtn "> 
+                                View
+                            </a>    
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="pt-5"></div>
+
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}
+
+
+

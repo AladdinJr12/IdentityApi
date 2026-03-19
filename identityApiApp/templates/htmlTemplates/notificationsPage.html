@@ -1,0 +1,21 @@
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container pb-5">
+    <h1 class="mt-4 text-center pb-4 notificationPageTitle"> Notifications </h2>
+    <ul class="list-group">
+        {% for notification in notification_list %}
+            <li class="list-group-item d-flex justify-content-between notificationLi">
+                <span>{{ notification.notification_content }}</span>
+                <small class="text-muted">{{ notification.created_date }}</small>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted">No updates yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}
+

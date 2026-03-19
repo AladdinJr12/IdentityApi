@@ -1,0 +1,52 @@
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid formSect align-items-center d-flex justify-content-center pb-5">
+    <div class="card formCard text-center mt-5 pb-5" >
+        <div class="card-body ">
+            <h1 class="pb-3"> 
+                Edit Your Profile 
+            </h1>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ profileUpdateForm.non_field_errors }}
+                
+                <ul class="passwordHelptext">
+                    The username's length must be at least 4 characters long.
+                </ul>
+
+                {% for profileField in profileUpdateForm %}
+                    <div>
+
+                        <label class="form-label fw-semibold pb-1 d-block pt-1">
+                            {{ profileField.label }}
+                        </label>
+                        
+                        
+                        <div class="position-relative pb-3">
+                            {{ profileField }}
+
+                        </div>
+                            
+                        {% for error in profileField.errors %}
+                            <div class="formError">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="genericButton mt-4"> Update profile </button>
+
+            </form>
+            
+        </div>
+
+    </div>
+        
+</div>
+
+{% endblock %}
+
+

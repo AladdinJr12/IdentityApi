@@ -1,0 +1,54 @@
+<!-- the page for editing a selected identity -->
+
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid formSect align-items-center d-flex justify-content-center pb-5">
+    <div class="card formCard text-center mt-5 pb-5" >
+        <div class="card-body ">
+            <h1 class="pb-3"> 
+                Edit Your Profile 
+            </h1>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% if edit_identity_form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {% for error in edit_identity_form.non_field_errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+
+                {% for identityField in edit_identity_form %}
+                    <div>
+
+                        <label class="form-label fw-semibold pb-1 d-block pt-1">
+                            {{ identityField.label }}
+                        </label>
+                        
+                        
+                        <div class="position-relative pb-3">
+                            {{ identityField }}
+
+                        </div>
+                            
+
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="genericButton mt-4"> Update identity </button>
+
+            </form>
+            
+        </div>
+
+    </div>
+        
+</div>
+
+{% endblock %}

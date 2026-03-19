@@ -1,0 +1,553 @@
+/*-------________For most of the sections/generic use______----------*/
+.mainBody{
+    background-color: #FACE68;
+}
+
+body.modal-open {
+    overflow: hidden;
+    padding-right: 0 !important;
+}
+
+/* This allows footer to stay down even when we minimize the screen */
+main {
+    flex: 1;
+}
+
+
+.iconTxt, .redText{
+    color: #C00707 !important;
+}
+
+.genericTitle{
+    font-size: 400%;
+}
+
+.smallerGenericTitle{
+    font-size: 200% ;
+}
+
+.smallerGenericTitle, .genericTitle{
+    font-weight: bolder;
+    color: #0b0909;
+}
+
+
+.infoTextInput{
+    height: 100% !important;
+}
+/*-------for the header sect----------*/
+.HeaderSect{
+    background-color: white ;
+    /* min-height: 20%; */
+}
+
+/* for the title  */
+.appTitle{
+    font-size: 300% !important;
+    font-weight: 600;
+}
+
+.Qword{
+    color: #FACE68 ;
+    font-size: 500% !important;
+}
+
+.appTitleHover:hover span {
+    color: #FFAA00;
+}
+
+/*-------------------*/
+.bell{
+    font-size: 400%;
+    padding-left: 5%;
+}
+
+.bell:hover{
+    color: #a10a0a;
+}
+
+#notificationDot{
+    font-size: 100% ;
+    position: absolute;
+    bottom: 40;
+    left:40;
+    color: #ffffff ;
+    background-color: #C00707 !important;
+
+}
+
+/*_______________------------------startingPage.html------------------________________*/
+.startingPageTitle{
+    font-size: 305%;
+    color: rgb(244, 244, 238);
+    font-weight: bolder;
+}
+
+.SignUpBtn, .LoginBtn{
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+.SignUpBtn{
+    color: black !important ;
+    background-color: white !important;
+    width: 18rem;
+    height: 5rem;
+    font-size: 2.3rem !important;
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+}
+
+.SignUpBtn:hover{
+    background-color: rgb(190, 187, 187) !important;
+}
+
+.LoginBtn{
+    color: white !important ;
+    background-color: #131212 !important;
+    width: 18rem;
+    height: 5rem;
+    font-size: 2.3rem !important;
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginBtn:hover{
+    background-color: rgb(95, 92, 92) !important;
+}
+
+/*____----Buttons used in both login page, signupPage 
++ verification page + reset password page------_____*/
+.genericButton{
+    background-color: #FFF2F2;
+    min-width: 10.5rem;
+    height: 3rem;
+    outline: 2px solid black;
+    border-radius: 1cm;
+}
+
+.passwordEyeToggleBtn, .passwordEyeToggleBtnForSignup, .passwordEyeToggleBtnForResetPassword {
+    position: absolute !important;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 18px;
+}
+
+.passwordEyeToggleBtn {
+    right: 10px;
+}
+
+.passwordEyeToggleBtnForResetPassword{
+    margin-right: 20%;
+    transform: translateY(-80%) !important;
+}
+
+input[type="password"],
+input[type="text"] {
+    padding-right: 40px; /*---making space for the eye button----*/
+}
+
+/*----The hover for most of the buttons---*/
+.genericButton:hover, .resendCodeBtn:hover,
+ .verification_pageBtn:hover, #resendCodeBtn:hover, 
+ .forgetPasswordPageBtn:hover ,#backToLoginBtn:hover{
+    background-color: #FACE68;
+}
+
+/*_____________------------for just signupPage.html-----------------___________________*/
+
+.formError{
+    color: red;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-bottom: 1%;
+}
+
+.passwordHelptext{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 82%;
+    color: #dbaa36;
+}
+
+/*___________________---------------for just loginPage.html-----------------___________________*/
+.forgetPasswordTxt{
+    color: #131212 !important;
+}
+
+.forgetPasswordTxt:hover{
+    color: #dbaa36 !important;
+}
+
+/*________________------------------verificationPage.html-----------------___________________*/
+.verification_pageBtn{
+    width: 20%;
+
+}
+
+.verifyBtn{
+    background-color: #FFF2F2;
+    color: #131212;
+}
+
+
+/*______-----------for both verificationPage.html and forgetPassword.html--------_____________*/
+#resendCodeBtn, #backToLoginBtn{
+    background-color: #121111;
+    color:  #FFF2F2;
+    outline: 2px solid rgba(226, 226, 226, 0.358);
+}
+
+.verification_pageBtn, .forgetPasswordPageBtn{
+    height: 3rem;
+    border-radius: 1cm;
+}
+
+
+/*_________________--------------forgetPassword.html---------------------______________________*/
+.forgetPasswordPageBtn{
+    width: 30%;
+}
+
+
+/*_________--for all pages that uses a form (login.html, signin, verification
+, forgetpassword, resetPassword)--__________*/
+.formCard{
+    min-width: 70% !important;
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.formSect{
+    min-height: 70%;
+    padding-top: 1%;
+    
+}
+
+/*_____________________--------------homepage.html------------------------___________________*/
+
+.homepageDiv{
+    padding-bottom: 10%;
+}
+
+.homepageTitle{
+    color: #1b1919;
+    font-size: 6rem;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    letter-spacing: 0.2cm;
+    font-weight: bolder;
+}
+
+.homepageBtn{
+    background-color: #FFF2F2 !important;
+    width: 13.5rem;
+    height: 9rem;
+    outline: 10px solid black;
+    box-shadow: #121111;
+    padding-top: 10% !important;
+    font-size: 1.8rem !important;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+}
+
+.homepageBtn:hover{
+    background-color: #dbaa36 !important;
+}
+
+.homepageBtnLastRow{
+    margin-top: 10% !important;
+}
+
+
+.manageCustomClientBtn{
+    font-size: 170% !important ;
+}
+/*_____________________-----------------ProfilePage.html------------------------_______________*/
+.profileSect{
+    padding-bottom: 20%;
+}
+
+.profilePageStartingDiv{
+    padding-top:    2%;
+    padding-bottom: 2%;
+}
+
+/*--This is the div storing the username and email texts and labels */
+.profileDetailsDiv{
+    margin-left: 32% !important;
+}
+
+.profile2ndMainDiv{
+    background-color: #FBF6F6;
+    padding-top:    1%;
+    padding-bottom: 1%;
+    margin-left: 0.25% !important;
+    width: 99.5%;    
+}
+
+.profileFirstBtn, .profileSecondBtn{
+    color: #dbaa36!important ;
+    background-color: #131212 !important;
+    width: 18rem;
+    height: 5rem;
+    outline: 5px solid #dbaa36;
+    font-size: 2rem !important;
+    padding-top: 1.5% !important;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+}
+
+.profileFirstBtn{
+    margin-right: 5%;
+}
+
+.profileSecondBtn{
+    margin-left: 5%;
+}
+
+.profileFirstBtn:hover, .profileSecondBtn:hover{
+    background-color: #dbaa36 !important;
+    color: #FBF6F6 !important;
+}
+
+/*_____________________-----------------AddIdentity.html------------------------_______________*/
+.AddContextBtn{
+    background-color: #589bc5;
+    min-width: 6rem;
+    height: 3rem;
+    font-size: 0.9rem ;
+    outline: 3px solid black;
+    font-weight: bolder;
+}
+
+.AddContextBtn:hover{
+    color:#FFF2F2;
+    background-color: #89D4FF;
+}
+
+/*_____________________-----------------identityManager.html------------------------_______________*/
+.ViewIdentityBtn{
+    color: white !important;
+    background-color: #589bc5 !important;
+}
+
+.ViewIdentityBtn:hover{
+    color: #dbaa36 !important;
+    background-color: #89D4FF !important;
+}
+
+.identitiesHelpTex {
+    color: #C00707;
+    font-weight: bolder;
+}
+
+.contextHeader{
+    color: #C00707;
+    font-weight: bolder;
+    font-size: 350%;
+}
+
+.priorityIdentityStar{
+    color: #dbaa36 ;
+}
+.priorityIdentity{
+    color: #dbaa36 !important;
+    font-style: italic;
+    font-weight: bolder;
+}
+
+/*_____________________----------------identityView.html----------------------_______________*/
+.prioritizeBtn{
+    font-size: 120% !important;
+}
+
+.identityViewPageBtn{
+    color: #dbaa36 !important;
+    background-color: #000000 !important;
+    outline: 5px solid #dbaa36;
+}
+
+.identityViewPageBtn:hover{
+    background-color: #dbaa36 !important;
+    color: white !important;
+}
+
+/*_____________________----------------ApiTesting.html----------------------_______________*/
+.apiSectLine{
+    height: 10%;
+    color: #0b0909 !important;
+    background-color: #0b0909 !important;
+}
+
+.apiContextReqTitle{
+    color: #a10a0a;
+    font-size: 320%;
+    font-weight: bolder;
+}
+.urlHeader{
+    font-size: 110%;
+    color: #f06767 !important;
+}
+
+#ApiEyeToggleBtn{
+    background-color: #090909 ;
+    outline: 3px solid #c18700 ;
+    border-radius: 4rem;
+    margin-top: 2%;
+}
+
+#ApiEyeToggleBtn:hover{
+    background-color: #ffffff49;
+}
+
+.ApiEyeToggleBtnTxt{
+    font-size: 180%;
+    margin-top: 7%;
+}
+
+
+/*_____________________----------------notificationsPage.html----------------------_______________*/
+
+.notificationPageTitle{
+    font-size: 400%;
+}
+
+.identityResultCard{
+    max-width: 25rem;
+    min-width: 20rem !important;
+    min-height: 15rem;
+    padding-left:  1%;
+    padding-right: 1%;
+}
+
+.blackSeratorLine{
+    height: 3px;
+    background-color: black;
+    width: 100%;
+    margin: 20px 0;
+}
+
+
+/*_____________________---------------------footer.html------------------------___________________*/
+#footerSect{
+    background-color: whitesmoke;
+}
+
+.footerLine{
+    border: 1px solid black;
+    margin-top: 1.5%;
+}
+
+.footer{
+    margin-top: 1rem !important;
+}
+
+.footerLinks {
+    text-decoration: none !important;
+    color: inherit; 
+}
+
+.footerLinks:hover{
+    color: #FFAA00;
+}
+
+.footerEmojis{
+    font-size: 160%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+/* for just the mobile view  (This will be arranged aphabetically---*/
+@media (max-width: 767.98px) {
+    .addClientHelpText{
+        font-size: 80%;
+    }  
+    #apiKeyText{
+        font-size: 50%;
+    }
+    .contextHeader{
+        font-size: 200%;
+    }
+    .footerEmojis, .footerLinks, .footerTitle{
+        font-size: 100% !important;
+    }
+    #footerSect {
+        padding-bottom: 100%;
+    }
+    .footerTitle{
+        font-weight: bolder;
+
+        padding-top: 3.5%;
+    }
+    
+    .genericTitle{
+        font-size: 200%;
+    }
+    .homepageBtn{
+        width: 9rem;
+        height: 6rem;
+
+        padding-top: 15% !important;
+        font-size: 1.1rem !important;
+
+    }
+    .homepageTitle{
+        font-size: 2.5rem;
+    }
+    .identityViewPageBtn{
+        font-size: 80% ;
+        margin-left: 20% !important;
+        min-width: 20%;
+        min-height: 100%;
+    }
+
+    .notificationLi{
+        font-size: 80%;
+    }
+
+    .notificationPageTitle{
+        font-size: 200%;
+    }
+    
+    .passwordEyeToggleBtnForResetPassword{
+        transform: translateY(-130%);
+    }
+
+    .profileButtonsRowDiv{
+        padding-bottom: 5% ;
+    }
+    .profileDetailsDiv{
+        margin-left: 5% !important;
+    }
+
+    .profileFirstBtn, .profileSecondBtn{
+        width: 8rem;
+        height: 3rem;
+        outline: 5px solid #dbaa36;
+        font-size: 1rem !important;
+        padding-top: 3% !important;      
+    }
+
+    .ProfileLabels{
+        font-size: 1.3rem;
+    }
+    
+    .identitiesTable{
+        font-size: 70% ;
+    }
+
+    .trashIcon{
+        font-size: 200%;
+    }
+
+    .verification_pageBtn{
+        width: 50%;
+    }
+    .ViewIdentityBtn{
+        /* width: 50%;
+        height: 50%; */
+        font-size: 70% !important;
+    }
+
+
+}

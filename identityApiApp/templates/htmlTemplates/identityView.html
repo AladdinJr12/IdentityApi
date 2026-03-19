@@ -1,0 +1,155 @@
+<!-- This is where the user's profile page is placed -->
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="profilePageStartingDiv">
+    <div class="justify-content-center text-center profile2ndMainDiv">
+
+        <div class=" text-center ">
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    Identity name: 
+                </span>
+                
+                {{ selected_identity.identity_name }}
+
+            </h3>
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    Security level:
+                </span>
+                {{ selected_identity.security_level }}
+            </h3>
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    Visibility:
+                </span>
+                {{ selected_identity.visibility }}
+            </h3>
+
+            <h3 class="ProfileLabels pt-5">
+                <span class="redText">
+                    Context:
+                </span>
+                {{ selected_identity.identity_context }}
+            </h3>
+            
+        </div>
+
+
+        <!-- for just the desktop view -->
+        <div class="row d-none d-md-flex pt-5 pb-3">
+
+            <div class="col-md-4 text-center">
+                <a href="{% url 'edit_identity' selected_identity.id %}" class="btn profileFirstBtn pt-3">
+                    Edit Identity
+                </a>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <a href="{% url 'prioritize_identity' selected_identity.id %}" class="btn profileFirstBtn prioritizeBtn pt-3">
+                    Prioritize Identity for this context
+                </a>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <form method="POST" action="{% url 'delete_identity' selected_identity.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="button" class="btn profileSecondBtn delete-btn3">
+                        <!-- This is the trash can icon from fontaweesome -->
+                        <i class="fa-solid fa-trash-can trashIcon"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+
+        <!-- same buttons but for just the mobile view -->
+        <div class="d-md-none text-center pt-5 pb-4 row">
+            <div class="col-4">
+                <a href="{% url 'edit_identity' selected_identity.id %}" class="btn identityViewPageBtn">
+                    Edit Identity
+                </a>
+            </div>
+            <div class="col-4">
+                <a href="{% url 'prioritize_identity' selected_identity.id %}" class="btn identityViewPageBtn">
+                    Prioritize Identity
+                </a>
+            </div>
+            <div class="col-4">
+                <form method="POST" action="{% url 'delete_identity' selected_identity.id %} ">
+                    {% csrf_token %}
+                    <button type="button" class="btn identityViewPageBtn delete-btn3">
+                        <!-- This is the trash can icon from fontaweesome -->
+                        <i class="fa-solid fa-trash-can trashIcon"></i>
+                    </button>
+                </form>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade mt-5" id="deleteClientModal3" tabindex="-1" aria-labelledby="deleteClientModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteClientModalLabel3">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete client <strong id="modalClientName3"></strong>?
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn3">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let selectedForm = null;
+    const deleteButtons = document.querySelectorAll(".delete-btn3");
+    const modal = new bootstrap.Modal(document.getElementById("deleteClientModal3"));
+
+    //---When any of the delete buttons is clicked-----#
+    deleteButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+            selectedForm = this.closest("form"); //---store the correct delete form---#
+            modal.show();
+        });
+    });
+
+    //-----For the user to confirm deletion--------#
+    document.getElementById("confirmDeleteBtn3").addEventListener("click", function () {
+        if (selectedForm) {
+            selectedForm.submit(); //-----submit the correct form-------#
+        }
+    });
+
+});
+</script>
+
+
+{% endblock %}
+
+
+
+

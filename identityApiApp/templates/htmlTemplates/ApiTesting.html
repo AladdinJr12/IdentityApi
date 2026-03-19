@@ -1,0 +1,333 @@
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container mt-5 text-center">
+    <!-- Alert for being redirected here-->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert 
+                {% if 'success' in message.tags %}
+                    alert-success
+                {% else %}
+                    alert-danger
+                {% endif %}
+                    alertMessage" 
+                    role="alert">
+                        {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h1 class="pb-2"> API testing</h1>
+    <ul class="identitiesHelpText">
+        Where you check what identity will be returned by what request:
+    </ul>
+
+    
+    <!-- A separator line -->
+    <div class="blackSeratorLine"></div>
+    
+    <h1 class="apiContextReqTitle mb-5"> Context requests </h1>
+    
+    <!-- ✅ Success/❌ unssuccessuly Alert for user errors when requesting for an identity -->
+    <div id="firstAlertContainer" class="pb-2"></div>
+
+    <div class="mb-5">
+        <label class="form-label fw-bold smallerGenericTitle"> Who are we requesting from?</label>
+        <input type="email" id="emailInput1" class="form-control" placeholder="Enter the targeted user's email">
+    </div>
+
+
+    <div class="mb-3">
+        <label class="form-label fw-bold smallerGenericTitle">Select Context</label>
+
+        <select id="contextSelect" class="form-select">
+            <option value="">Choose a context</option>
+
+            {% for context in context_list %}
+                <option value="{{ context.id }}">
+                    {{ context.context_name }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <button type="button" id="contextIdentityRequestBtn" class="genericButton mt-3 mb-5" > Request identity </button>
+        
+        <div class="d-flex justify-content-center">
+            <div class="card text-white bg-dark mb-3 pb-4 identityResultCard" id="ContextIdentityResults">
+                <div class="card-header urlHeader">URL </div>
+                <div class="card-body">
+                    <h5 class="card-title">Identity name </h5>
+                    <p class="card-text"> Identity information</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="blackSeratorLine"></div>
+
+    
+    
+    <h1 class="apiContextReqTitle mb-5 pt-5"> API Key requests </h1>
+    <div id="secondAlertContainer" class="pb-2"></div>
+    
+    <div class="mb-3">
+        <label class="form-label fw-bold smallerGenericTitle">Enter API Key</label>
+        <input type="text" id="apiKeyInput" class="form-control" placeholder="Enter API key">
+        <button type="button" id="apiRequestBtn" class="genericButton mt-3 mb-5" > Request identity </button>
+        
+        <div class="d-flex justify-content-center mt-5">
+            <div class="card text-white bg-dark mb-3 pb-4 identityResultCard" id="clientIdentityResults">
+                <div class="card-header urlHeader">URL </div>
+                <div class="card-body">
+                    <h5 class="card-title">Identity name </h5>
+                    <p class="card-text"> Identity information</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>    
+document.addEventListener("DOMContentLoaded", function() {
+    
+    //---Get the the email, context select input and the resulting card div----#
+    const emailInput1 = document.getElementById("emailInput1");
+    const contextInput = document.getElementById("contextSelect");
+    const resultsDiv = document.getElementById("ContextIdentityResults");
+
+    //----for the api request sect-----------#
+    const apiKeyInput = document.getElementById("apiKeyInput");
+    const ApiResultsDiv = document.getElementById("clientIdentityResults");
+    
+    //----for being redirected here after a succesful verification----#
+    const pendingApiKey = "{{ request.session.pending_api_key|default:'' }}";
+    const pendingApiContextKey = "{{ request.session.pending_contextID_key|default:'' }}";
+
+    console.log("----pendingApiKey----")
+    console.log(pendingApiKey)
+
+    console.log("-------pendingApiContextKey-----")
+    console.log(pendingApiContextKey)
+
+    //----for the context identity retreiving button---------------#
+    document.getElementById("contextIdentityRequestBtn").addEventListener("click", function() {
+        //---get the email and context input----#
+        const email = emailInput1.value;
+        const selectedContext = contextInput.value
+        
+        //---in case no email was selected---#
+        if(!email){
+            showIdentityAlert("Please enter an email", "danger", 1)
+            return;
+        }
+        //---in case no context was selected---#
+        if(!selectedContext){
+            showIdentityAlert("Please select a context first", "danger", 1)
+            return;
+        }
+
+        //---build the url with the django template----//
+        const url = "{% url 'api_get_identity_with_context' 'CONTEXT_ID' %}"
+            .replace('CONTEXT_ID', selectedContext) + `?email=${encodeURIComponent(email)}`;
+
+        //----calling the url for requesting request via context---#
+        fetch(url)
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.requires_verification) {
+                // redirect to OTP page
+                window.location.href = "/verification-page/";
+                return;
+            }
+
+            if (data.error) {
+                showIdentityAlert(data.error, "danger", 1);
+                // ----Update card for error---//
+                resultsDiv.innerHTML = `
+                    <div class="card-header urlHeader">${url}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">No identity was found!</h5>
+                        <p class="card-text">(404)</p>
+                        <p class="card-text">-</p>
+                    </div>
+                `;
+                return;
+            }
+
+            //-----------A normal success----------//
+            resultsDiv.innerHTML = `
+                <div class="card-header urlHeader">${url}</div>
+                <div class="card-body">
+                    <h5 class="card-title">${data.identity_name}</h5>
+                    <p class="card-text">(${data.context})</p>
+                    <p class="card-text">- ${data.related_info}</p>
+                </div>
+            `;
+        });
+    })
+    
+
+    //-------_____________for the api request button______________----------//
+    document.getElementById("apiRequestBtn").addEventListener("click", function() {
+
+        const inputApiKey = apiKeyInput.value
+        if (!inputApiKey){
+            showIdentityAlert("Please enter an API key", "danger" ,2)
+            return 
+        }
+        
+        //---build the url with the django template----//
+        const url = "{% url 'get_api_identity' %}"+ `?api_key=${encodeURIComponent(inputApiKey)}`;
+        
+        fetch(url)
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.requires_verification) {
+                // redirect to OTP page
+                window.location.href = "/verification-page/";
+                return;
+            }
+
+            if (data.error) {
+                showIdentityAlert(data.error, "danger", 2);
+                ApiResultsDiv.innerHTML = `
+                    <div class="card-header urlHeader">${url}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">No identity was found!</h5>
+                        <p class="card-text">(404)</p>
+                        <p class="card-text">-</p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            ApiResultsDiv.innerHTML = `
+                <div class="card-header urlHeader">${url}</div>
+                <div class="card-body">
+                    <h5 class="card-title">${data.identity_name}</h5>
+                    <p class="card-text">(${data.context})</p>
+                    <p class="card-text">- ${data.related_info}</p>
+                </div>
+            `;
+        });
+
+    })
+
+
+    //---if the user gets redircted here after verification---#
+    if (pendingApiKey) {
+
+        const url = "{% url 'get_api_identity' %}" + `?api_key=${encodeURIComponent(pendingApiKey)}`;
+
+        fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            console.log("----data--------------")
+            console.log(data)
+            if (data.error) {
+                showIdentityAlert(data.error, "danger", 2);
+                ApiResultsDiv.innerHTML = `
+                    <div class="card-header urlHeader">${url}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">No identity was found!</h5>
+                        <p class="card-text">(404)</p>
+                        <p class="card-text">-</p>
+                    </div>
+                `;
+                return;
+            }
+
+            ApiResultsDiv.innerHTML = `
+                <div class="card-header urlHeader">${url}</div>
+                <div class="card-body">
+                    <h5 class="card-title">${data.identity_name}</h5>
+                    <p class="card-text">(${data.context})</p>
+                    <p class="card-text">- ${data.related_info}</p>
+                </div>
+            `;
+        });
+    }
+
+    if(pendingApiContextKey){
+        //---build the url with the django template----//
+        const url = "{% url 'api_get_identity_with_context' 'CONTEXT_ID' %}".replace('CONTEXT_ID', pendingApiContextKey)
+         fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            console.log("----data--------------")
+            console.log(data)
+            if (data.error) {
+                showIdentityAlert(data.error, "danger", 1);
+                
+                resultsDiv.innerHTML = `
+                    <div class="card-header urlHeader">${url}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">No identity was found!</h5>
+                        <p class="card-text">(404)</p>
+                        <p class="card-text">-</p>
+                    </div>
+                `;
+            
+                return;
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="card-header urlHeader">${url}</div>
+                <div class="card-body">
+                    <h5 class="card-title">${data.identity_name}</h5>
+                    <p class="card-text">(${data.context})</p>
+                    <p class="card-text">- ${data.related_info}</p>
+                </div>
+            `;
+        });
+
+    }
+    
+
+})
+
+function showIdentityAlert(message, type="success", container_num) {
+    let alertContainer; 
+    if(container_num == 1){
+        alertContainer = document.getElementById("firstAlertContainer");
+    }
+    else if (container_num == 2){
+
+        alertContainer = document.getElementById("secondAlertContainer");
+    }
+
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${type} alert-dismissible fade show`;
+    alert.role = "alert";
+
+    //---the bootstrap alert with a button to dismisss it----#
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    alertContainer.appendChild(alert);
+
+    //---auto-remove after 5s---//
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}
+
+</script>
+
+{% endblock %}
+
+

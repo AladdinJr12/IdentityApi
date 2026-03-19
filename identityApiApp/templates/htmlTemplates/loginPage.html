@@ -1,0 +1,91 @@
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+<div class="container-fluid formSect d-flex justify-content-center align-items-center pb-5">
+    <div class="card formCard text-center mt-5 pb-5" >
+        <div class="card-body ">
+            <h1> Sign in to IdentiQ</h1>
+            <form method="POST" class="pb-2 pt-3">
+                {% csrf_token %}
+
+                <!-- Alert for being redirected here-->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert 
+                            {% if 'success' in message.tags %}
+                                alert-success
+                            {% else %}
+                                alert-danger
+                            {% endif %}
+                                alertMessage" 
+                                role="alert">
+                                    {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- for the errors -->
+                {% for errorField in loginForm %}
+                    {% for error in errorField.errors %}
+                        <div class="formError">{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+                
+                {% for formField in loginForm %}
+                    <div class="mb-3 text-center 
+                        {% if forloop.counter == 2 %} pt-4 {% endif %}">
+
+                        <label class="form-label fw-semibold formTitles pb-1">
+                            {{ formField.label }}
+                        </label>
+
+                        {% if formField.name == "password" %}
+                        <!-- putting in the password censor toggle btn -->
+                            <div class="position-relative">
+                                {{ formField }}
+                                <button type="button" 
+                                        class="passwordEyeToggleBtn"
+                                        onclick="togglePasswordVisibility(this)">
+                                        👁
+                                </button>
+                            </div>
+                        {% else %}
+                            {{ formField }}
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+                <a href="{% url 'forget_password' %}"
+                    class= "forgetPasswordTxt mt-3">
+                    Forget password?
+                </a>
+
+                <div class="pt-5 mt-1">
+                    <button type="submit" class=" genericButton">Login</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- This function allows user to censor/decensor the password input 
+ by clicking on the eyeball button -->
+<script>
+    function togglePasswordVisibility(btn) {
+        // Here I am utilizing the fact that Django automatically
+        //  gives the password field the ID "id_password":
+         const passwordInput = btn.parentElement.querySelector("input");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            btn.textContent = "🔒";
+        } else {
+            passwordInput.type = "password";
+            btn.textContent = "👁";
+        }
+    }
+</script>
+{% endblock %}
+

@@ -1,0 +1,206 @@
+<!-- ---The home page after logging in---- -->
+
+
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-5 pb-5 text-center ">
+    <!-- Alert for being redirected here-->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert 
+                {% if 'success' in message.tags %}
+                    alert-success
+                {% else %}
+                    alert-danger
+                {% endif %}
+                    alertMessage" 
+                    role="alert">
+                        {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- laptop/comp view -->
+    <h1 class="homepageTitle d-none d-md-block"> 
+        Welcome
+        <span class="redText">        
+            {{ username }} 
+        </span>
+    </h1>
+    
+    <!-- mobile view -->
+    <h1 class="homepageTitle d-md-none"> 
+        Welcome
+        <br>
+        <span class="redText">
+            {{ username }} 
+        </span> 
+    </h1>
+
+    <!-- Buttons Row of buttons-->
+    <div class="container mt-5 d-none d-md-block homepageDiv">
+        <div class="row justify-content-center">
+
+            <!-- For checking/updating user profiles -->
+            <div class="col-md-4 text-center">
+                <a href="{% url 'profile_page' %}"
+                    class="btn homepageBtn mt-3 ">
+                        <i class="fa-solid fa-address-card iconTxt"></i>
+                        View Profile
+                </a>
+            </div>
+
+            <!-- For checking all of the identies set by the user -->
+            <div class="col-md-4 text-center">
+                <a href="{% url 'identity_management' %}"
+                    class="btn homepageBtn mt-3">
+                        <i class="fa-solid fa-address-book iconTxt"></i>
+                        Manage identities
+                </a>
+            </div>
+
+            <!-- For addining in new identities -->
+            <div class="col-md-4 text-center">
+                <a href="{% url 'add_identity' %}"
+                    class="btn homepageBtn mt-3">
+                        <i class="fa-solid fa-file-pen iconTxt"></i>
+                        Create New Identity
+                </a>
+            </div>
+
+            <!-- for custom clients -->
+            <div class="col-md-4 text-center homepageBtnLastRow">
+                <a href="{% url 'add_client' %}"
+                    class="btn homepageBtn">
+                        <i class="fa-brands fa-sourcetree iconTxt"></i>
+                        Add Custom Client
+                </a>
+            </div>
+
+            <!-- for viewing all created custom clients -->
+            <div class="col-md-4 text-center homepageBtnLastRow">
+                <a href="{% url 'client_management' %}"
+                    class="btn homepageBtn manageCustomClientBtn">
+                        <i class="fa-brands fa-sourcetree iconTxt"></i>
+                        Manage Custom Clients
+                </a>
+            </div>
+
+            <!-- Redirects to api request testing page -->
+            <div class="col-md-4 text-center homepageBtnLastRow">
+                <a href="{% url 'api_testing' %}"
+                    class="btn homepageBtn ">
+                        <i class="fa-solid fa-key iconTxt"></i>
+                        API Request Testing
+                </a>
+            </div>
+
+            <!-- Redirects to the reset password page -->
+            <div class="col-md-4 text-center homepageBtnLastRow">
+                <a href="{% url 'auth_reset_password' %}"
+                    class="btn homepageBtn ">
+                        <i class="fa-solid fa-lock iconTxt"></i>
+                        Change Password 
+                </a>
+            </div>
+
+            <!-- logout button -->
+            <div class="col-md-4 text-center homepageBtnLastRow">
+                <a href="{% url 'logout' %}"
+                    class="btn homepageBtn pt-2">
+                        <br>
+                        <i class="fa-solid fa-arrow-right-from-bracket iconTxt"></i>
+                        Logout
+                </a>
+            </div>
+            
+
+        </div>
+    </div>
+
+
+    <!-- Same 6 buttons but only Visible only on mobile -->
+    <div class="row d-md-none mt-3 text-center">
+        <div class="col-6">
+            <a href="{% url 'profile_page' %}"
+                class="btn homepageBtn mt-3 pb-5">
+
+                    <i class="fa-solid fa-address-card iconTxt"></i>
+                    View Profile
+            </a>
+        </div>
+
+        <div class="col-6">
+            <a href="{% url 'identity_management' %}"
+                class="btn homepageBtn mt-3">
+                    <i class="fa-solid fa-address-book iconTxt"></i>
+                    Manage identities
+            </a>
+        </div>
+
+        <div class="col-6 pt-3">
+            <a href="{% url 'add_identity' %}"
+                class="btn homepageBtn mt-3">
+                    <i class="fa-solid fa-file-pen iconTxt"></i>
+                    Create New Identity
+            </a>
+        </div>
+
+        <div class="col-6 pt-3">
+            <a href="{% url 'add_client' %}"
+                class="btn homepageBtn mt-3">
+                    <i class="fa-solid fa-file-pen iconTxt"></i>
+                    Add Custom Client
+            </a>
+        </div>
+
+        <div class="col-6 pt-3">
+            <a href="{% url 'client_management' %}"
+                class="btn homepageBtn mt-3 manageCustomClientBtn">
+                    <i class="fa-solid fa-file-pen iconTxt"></i>
+                    Manage Custom Clients
+            </a>
+        </div>
+
+        <div class="col-6 pt-3">
+            <a href="{% url 'api_testing' %}"
+                class="btn homepageBtn mt-3">
+                    <i class="fa-solid fa-key iconTxt"></i>
+                    API Request Testing
+            </a>
+        </div>
+        
+        <div class="col-6 pt-3">
+            <a href="{% url 'auth_reset_password' %}"
+                class="btn homepageBtn mt-3">
+                    <i class="fa-solid fa-lock iconTxt"></i>
+                    Change Password 
+            </a>
+    
+        </div>
+
+
+        <div class="col-6 pt-3">
+            <a href="{% url 'logout' %}"
+                class="btn homepageBtn pt-2 mt-3">
+                    <br>
+                    <i class="fa-solid fa-arrow-right-from-bracket iconTxt"></i>
+                    Logout
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+

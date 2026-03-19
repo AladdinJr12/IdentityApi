@@ -1,0 +1,176 @@
+{% extends "htmlTemplates/base.html" %}
+
+{% block content %}
+
+
+<div class="container-fluid formSect align-items-center d-flex justify-content-center pb-5">
+    <div class="card formCard text-center mt-5 pb-5" >
+        <div class="card-body ">
+            <h1 class="pb-3"> 
+                Add in a new identity
+            </h1>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+              
+                {% if identity_form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {% for error in identity_form.non_field_errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}                
+            
+                {% for identity_field in identity_form %}
+                    <div>
+
+                        <label class="form-label fw-semibold pb-1 d-block pt-1">
+                            {{ identity_field.label }}
+                        </label>
+                        
+                        
+                        <div class="position-relative pb-3">
+                            {% if identity_field.name == "identity_context" %}
+     
+                                <!-- ✅ Success/❌ unssuccessuly Alert upon adding a new context -->
+                                <div id="alertContainer" class="pb-2"></div>
+                                {{ identity_field }}
+    
+                            {% else %}
+                                {{ identity_field }}
+                            {% endif %}
+ 
+
+                        </div>
+                            
+                        {% for error in identity_field.errors %}
+                            <div class="formError">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <!-- Hidden context form  -->
+                <div id="contextFormSection" style="display:none;">
+                    
+                    {% for context_field in context_form %}
+                        <label class="form-label fw-semibold pb-1 d-block pt-1">
+                            {{ context_field.label }}
+                        </label>
+                        {{ context_field }}
+
+                        {% for error in context_field.errors %}
+                            <div class="formError">{{ error }}</div>
+                        {% endfor %}
+                    
+                    {% endfor %}
+
+                     <button type="button" id="submitContextBtn" class="AddContextBtn mt-3 mb-5">Add Context</button>
+
+                </div>
+
+
+                <button type="submit" class="genericButton mt-4"> Add identity </button>
+
+            </form>
+            
+        </div>
+
+    </div>
+        
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const contextDropdown = document.getElementById("id_identity_context");
+    const contextForm = document.getElementById("contextFormSection");
+    const contextInput = document.getElementById("id_context_name");
+
+    function updateContextForm() {
+        if (contextDropdown.value === "add_new_context") {
+            contextForm.style.display = "block";
+            contextInput.required = true;
+            contextInput.disabled = false;
+        } else {
+            contextForm.style.display = "none";
+            contextInput.required = false;
+            contextInput.disabled = true;
+        }
+    }
+
+    // Run once on page load
+    updateContextForm();
+
+    //-------Run on change-----//
+    contextDropdown.addEventListener("change", updateContextForm);
+
+    //-----Adding the evennt listner for the submit context button-----#
+    document.getElementById("submitContextBtn").addEventListener("click", function() {
+        //--get whatever was wrritten on the context input---#
+        const contextNameInput = contextInput.value;
+        
+        //---getting csrf---#
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        ///----calling the create context url route----#
+        fetch("{% url 'api_create_context' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({ context_name: contextNameInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showContextAlert("Your new context was successfully added", "success")
+                const option = document.createElement("option");
+                option.value = data.context_id;
+                option.text = data.context_name;
+                contextDropdown.add(option);
+                contextDropdown.value = data.context_id;
+                updateContextForm(); // make sure new context shows correctly
+            } else {
+                showContextAlert(data.error, "danger");
+            }
+        })
+        .catch(err => console.error(err));
+    });
+});
+
+//---so that a bootstrap alert will show when the user successfully/unsuccessfully adds in a new context--#
+function showContextAlert(message, type="success") {
+    const alertContainer = document.getElementById("alertContainer");
+
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${type} alert-dismissible fade show`;
+    alert.role = "alert";
+
+    //---the bootstrap alert with a button to dismisss it----#
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    alertContainer.appendChild(alert);
+
+    //---auto-remove after 5s---//
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}
+
+
+
+</script>
+
+
+
+
+
+{% endblock %}
+
+
+
