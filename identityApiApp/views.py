@@ -671,7 +671,7 @@ def add_client(request):
             return redirect("homepage")
              
     else:
-        form = APIClientForm()
+        form = APIClientForm(user=user)
 
     return render(
         request, 
@@ -978,25 +978,6 @@ def check_for_new_notifications(request):
     return JsonResponse({"has_new_updates": new_updates, "notification_count": num_of_notifications})
 
 
-
-#----the logic for identity retrieval based on identity_type----#
-#---add in login_required in the future----#
-def get_identity_from_identity_type(request, identity_type):
-    retrieved_identity =Identity.objects.filter(
-        # user = request.user -----for when the logging in function is set---#
-        identity_type = identity_type
-    ).first()
-
-    if retrieved_identity:
-        return JsonResponse({
-            "identity_name": retrieved_identity.identity_name
-        })
-    
-    #---this means nothing is found---#
-    return JsonResponse(
-        {"error_message": "Identity was not found"},
-        status = 404
-    )
 
 
 

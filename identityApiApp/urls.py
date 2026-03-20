@@ -26,7 +26,6 @@ urlpatterns =[
     path ('verification-page/', views.verification_page, name='verification_page' ),
     path ('notifications/', views.notifications_page, name='notifications' ),
     path ('check-for-new-notifications/', views.check_for_new_notifications, name='check_for_new_notifications' ),
-    path ('identity/<str:identity_type>/', views.get_identity_from_identity_type, name='get_identity_from_identity_type' ),
     path ('add-client/', views.add_client, name='add_client'),
     path('client-view/<int:client_id>/', views.client_view, name='client_view'),
     path ('edit-client/<int:client_id>/', views.edit_client, name='edit_client'),
