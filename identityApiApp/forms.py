@@ -355,22 +355,20 @@ class IdentityForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)  # <-- save the user
         super().__init__(*args, **kwargs)
 
+        # ----Only show contexts belonging to this user
+        if self.user:
+            self.fields["identity_context"].queryset = Context.objects.filter(
+                linked_user=self.user
+            )
 
-        #-----Get existing context choices from the ForeignKey field---#
-        original_choices = list(self.fields["identity_context"].choices)
-        
-        # ----remove the default empty option if present---#
-        original_choices = [choice for choice in original_choices if choice[0]]
+        #---default empty placeholder
+        self.fields["identity_context"].empty_label = "-------"
 
-        print("choices")
-        print(original_choices)
-        
-        #----Build new choices: The place holder and 
-        #the "Add new context" button", with the existing contexts behind it----#
-        self.fields["identity_context"].choices = [
-            ("", "-------"),   #---The default placeholder----#
-            ("add_new_context", "Add new context")
-        ] + original_choices
+        #-----Add in the other querysets---------#
+        original_qs = self.fields["identity_context"].queryset
+        self.fields["identity_context"].choices = [("", "-------"), ("add_new_context", "Add new context")] + [
+            (ctx.id, ctx.context_name) for ctx in original_qs
+        ]
 
 
     class Meta:

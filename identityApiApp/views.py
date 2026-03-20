@@ -196,6 +196,8 @@ def verification_page(request):
                     print("----Creating the sign up contexts---")
                     default_contexts = ["School", "Work", "Social"]
                     for default_context_name in default_contexts:
+                        print("defauly context name------------")
+                        print(default_context_name)
                         serializer = ContextSerializer(
                             data={"context_name": default_context_name, "linked_user": user.id}
                         )
@@ -484,8 +486,12 @@ def identity_management(request):
     grouped_identities = defaultdict(list)
 
     #---get all unique contexts this user made---#
-    unqiue_contexts = {contextObj.id: contextObj.context_name for contextObj in Context.objects.filter(linked_user=user)}
+    unqiue_contexts = {contextObj.id: contextObj.context_name for contextObj in contexts}
     
+    print("---------------unique contexts----------")
+    print(unqiue_contexts)
+    print(contexts)
+
     #---Each context id is linked to → a priority identity id (which is what this map has)---#
     priority_map = {contextObj.id: contextObj.priority_identity_id for contextObj in contexts}
 
@@ -501,6 +507,7 @@ def identity_management(request):
 
     #---converting to normal dict---#
     grouped_identities = dict(grouped_identities)  
+    
     print(grouped_identities)
     return render(
         request, 

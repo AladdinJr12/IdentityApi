@@ -41,7 +41,7 @@ class UserProfile(models.Model):
 
 #-----for the different context-----#
 class Context(models.Model):
-    context_name = models.CharField(max_length= 150, unique=True)
+    context_name = models.CharField(max_length= 150)
 
     linked_user = models.ForeignKey(
         User,
@@ -64,6 +64,14 @@ class Context(models.Model):
         related_name="verified_context_api_clients"
     )
 
+    #---so that each user will not have duplicated identities----#
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["linked_user", "context_name"],
+                name="unique_context_per_user"
+            )
+        ]
 
     def clean(self):
         if self.priority_identity and self.priority_identity.identity_context != self:
