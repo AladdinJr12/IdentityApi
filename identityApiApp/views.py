@@ -750,16 +750,7 @@ def get_identity_with_context(request, context_id):
         selected_context = get_object_or_404(Context, linked_user = user, id = pending_contextID_key)
         user = selected_context.linked_user
     else: 
-        try:
-
-            user = get_object_or_404(User, email=email)
-
-        except User.DoesNotExist: 
-            return Response({
-                    "error": "No user linked to that email was found",
-                }, 
-                status=404
-            )
+        user = get_object_or_404(User, email=email)
 
     #-----this means verification was not done
     if(pending_contextID_key ==None):
