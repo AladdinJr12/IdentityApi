@@ -106,6 +106,7 @@ def removeUnverifiedUsers():
     ).delete()
 
     if deleted_count > 0:
+        #---keep for debugging purposes---#
         print("---Unverified accounts have been deleted---")
 
 #---for directing to the starting page----#
@@ -159,7 +160,7 @@ def login_view(request):
         #---redirect to the verification page----//
         return redirect("verification_page")
     else:
-        print(form.errors) #--For debugging purposes--#
+        print(form.errors) #--For debugging purposes, keep--#
     
     return render(request, "htmlTemplates/loginPage.html", {"loginForm": form})
 
@@ -286,6 +287,7 @@ def user_logout(request):
     request.session.pop("verify_user_id", None)
 
     logout(request)
+    #----Leaving this in as it lets me now this was called--#
     print("A user has logout")
     #---redirect back to homepage-----#
     return redirect('index')
@@ -763,8 +765,13 @@ def get_identity_with_context(request, context_id):
         selected_context = get_object_or_404(Context, id = pending_contextID_key)
         #----Here users can have two contexts with the same context_name but they have different ids and different priority identity--#
         if (input_user !=None) and (selected_context.linked_user != input_user):
-            #---Get the same context name but for the input user instead
-            new_selected_context = get_object_or_404(Context, context_name = selected_context.context_name, linked_user = input_user)
+            #---Get the same context name but for the input user instead            
+            new_selected_context = Context.objects.filter(context_name = selected_context.context_name, linked_user = input_user).first()
+
+            if not new_selected_context:
+                return Response({
+                    "error": "Input user doesnt not have the selected context"
+                }, status=404)
             #---Update selected_context----#
             selected_context = new_selected_context
 
@@ -780,7 +787,12 @@ def get_identity_with_context(request, context_id):
             #----Here users can have two contexts with the same context_name but they have different ids and different priority identity--#
             if (input_user !=None) and (selected_context.linked_user != input_user):
                 #---Get the same context name but for the input user instead
-                new_selected_context = get_object_or_404(Context, context_name = selected_context.context_name, linked_user = input_user)
+                new_selected_context = Context.objects.filter(context_name = selected_context.context_name, linked_user = input_user).first()
+
+                if not new_selected_context:
+                    return Response({
+                        "error": "Input user doesnt not have the selected context"
+                    }, status=404)
                 #---Update selected_context----#
                 selected_context = new_selected_context
 
