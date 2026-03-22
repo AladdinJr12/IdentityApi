@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
         //---build the url with the django template----//
         const url = "{% url 'api_get_identity_with_context' 'CONTEXT_ID' %}"
             .replace('CONTEXT_ID', selectedContext) + `?email=${encodeURIComponent(email)}`;
-        console.log(url)
+
         //----calling the url for requesting request via context---#
         fetch(url)
         .then(res => res.json())
