@@ -24,13 +24,13 @@ myenv\Scripts\activate
 5) Start the project by running the command "python manage.py runserver 8080" 
 
 
-#----for the test-------#
-For running the unit tests:
+
+## For running the unit tests:
 1) Cd to the folder "IdentityApi-main"
 2) use the command "python manage.py test"
 
 
-#----The only superuser/admin user created----#
+## The only superuser/admin user created
 Username: UserAdmin1
 Password: Danganronpa
 
