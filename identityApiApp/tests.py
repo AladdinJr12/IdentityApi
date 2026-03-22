@@ -65,7 +65,7 @@ class AuthTests(TestCase):
         response = self.client.post(
             reverse('login'),
             {
-                "username": "new@test.com",   #  Remeber that I use email and not username
+                "username": "new@test.com",   # ---Remeber that I use email and not username---#
                 "password": "Testpass123!"
             }
         )
