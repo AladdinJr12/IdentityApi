@@ -736,8 +736,20 @@ def api_testing(request):
 @api_view(["GET"])
 def get_identity_with_context(request, context_id):
     user = request.user
+    input_user = None
 
     email = request.GET.get("email")
+
+    if email:
+        input_user = User.objects.filter(email=email).first()
+
+        if not input_user:
+            return Response({
+                "error": "No user linked to that email was found"
+            }, status=404)
+
+        user = input_user
+
 
     #---For when the user get redirected to ApiTesting.html----#
     pending_contextID_key = request.session.get("pending_contextID_key")
@@ -746,8 +758,17 @@ def get_identity_with_context(request, context_id):
         return Response({"error": "Email is required"}, status=400)
 
     #----get user from using the input email---#
+    #---This means verification was done---#
     if(pending_contextID_key != None):
-        selected_context = get_object_or_404(Context, linked_user = user, id = pending_contextID_key)
+        selected_context = get_object_or_404(Context, id = pending_contextID_key)
+        #----Here users can have two contexts with the same context_name but they have different ids and different priority identity--#
+        if (input_user !=None) and (selected_context.linked_user != input_user):
+            #---Get the same context name but for the input user instead
+            new_selected_context = get_object_or_404(Context, context_name = selected_context.context_name, linked_user = input_user)
+            #---Update selected_context----#
+            selected_context = new_selected_context
+
+
         user = selected_context.linked_user
     else: 
         user = get_object_or_404(User, email=email)
@@ -755,7 +776,15 @@ def get_identity_with_context(request, context_id):
     #-----this means verification was not done
     if(pending_contextID_key ==None):
         try:
-            selected_context = get_object_or_404(Context, linked_user = user, id = context_id)
+            selected_context = get_object_or_404(Context, id = context_id)
+            #----Here users can have two contexts with the same context_name but they have different ids and different priority identity--#
+            if (input_user !=None) and (selected_context.linked_user != input_user):
+                #---Get the same context name but for the input user instead
+                new_selected_context = get_object_or_404(Context, context_name = selected_context.context_name, linked_user = input_user)
+                #---Update selected_context----#
+                selected_context = new_selected_context
+
+
         except Context.DoesNotExist:
             return Response({"error": "Context not found"}, status=404)
 
