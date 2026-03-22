@@ -39,7 +39,7 @@ urlpatterns =[
     path ('api/delete-client/<int:client_id>/', views.api_delete_client, name='api_delete_client'),
     path ('api/get-client/', views.get_api_identity, name='get_api_identity'),
 
-    # Swagger documentation endpoints
+    #---Swagger documentation endpoints---#
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 ]

@@ -77,19 +77,17 @@ class SignupForm(UserCreationForm):
         return self.cleaned_data
     
     def save(self, commit=True):
-        # Get user object without saving
+        #----Get the user object but no save it----#
         user = super().save(commit=False)
         
-        # Assign random internal username
+        #---Assign a random internal username + email---#
         user.username = generate_unique_username()
         
-        # Assign email
         user.email = self.cleaned_data["email"]
         
-        # Save user so it has a PK
-        user.save()  # Must save here before creating related objects
-        
-        # Create UserProfile (now user has a PK)
+        #--saving user= generate pk for it---#
+        user.save()  #----Must save here before creating related objects---#
+    
         display_name = self.cleaned_data.get("display_name")
         UserProfile.objects.create(user=user, display_name=display_name)
         
@@ -434,7 +432,7 @@ class IdentityForm(forms.ModelForm):
                 identity_context=context
             )
            
-            # Exclude current instance if editing
+            # -----Exclude current instance if user is editing----#
             if self.instance.pk:
                 duplicate_identity = duplicate_identity.exclude(pk=self.instance.pk)
 
@@ -446,10 +444,10 @@ class IdentityForm(forms.ModelForm):
 
 class EditIdentityForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)  # Save the user
+        self.user = kwargs.pop('user', None)  #--get the input user---#
         super().__init__(*args, **kwargs)
 
-        # Populate identity_context choices same as IdentityForm
+        #----Populate identity_context choices with the same choices as IdentityForm-----#
         original_choices = list(self.fields["identity_context"].choices)
         original_choices = [choice for choice in original_choices if choice[0]]
 
@@ -503,7 +501,7 @@ class EditIdentityForm(forms.ModelForm):
                 identity_context=context
             )
 
-            # Exclude current instance if editing
+            #-----Exclude current instance if user is editing----#
             if self.instance.pk:
                 duplicate_identity = duplicate_identity.exclude(pk=self.instance.pk)
 

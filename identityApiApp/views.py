@@ -28,7 +28,6 @@ from django.core.mail import send_mail
 from django.contrib import messages
 
 #----for reset password----#
-# from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User
 
 #----for the add custom context button---#
