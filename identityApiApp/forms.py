@@ -433,10 +433,7 @@ class IdentityForm(forms.ModelForm):
                 visibility=visibility,
                 identity_context=context
             )
-            print("The duplicate identity")
-            print(duplicate_identity)
-            print(self.instance.linked_user if self.instance.pk else self.initial.get('linked_user'))
-
+           
             # Exclude current instance if editing
             if self.instance.pk:
                 duplicate_identity = duplicate_identity.exclude(pk=self.instance.pk)

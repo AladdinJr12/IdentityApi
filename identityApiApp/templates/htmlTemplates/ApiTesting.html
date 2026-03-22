@@ -112,12 +112,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const pendingApiKey = "{{ request.session.pending_api_key|default:'' }}";
     const pendingApiContextKey = "{{ request.session.pending_contextID_key|default:'' }}";
 
-    console.log("----pendingApiKey----")
-    console.log(pendingApiKey)
-
-    console.log("-------pendingApiContextKey-----")
-    console.log(pendingApiContextKey)
-
     //----for the context identity retreiving button---------------#
     document.getElementById("contextIdentityRequestBtn").addEventListener("click", function() {
         //---get the email and context input----#
@@ -234,8 +228,6 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(url)
         .then(res => res.json())
         .then(data => {
-            console.log("----data--------------")
-            console.log(data)
             if (data.error) {
                 showIdentityAlert(data.error, "danger", 2);
                 ApiResultsDiv.innerHTML = `
@@ -266,8 +258,6 @@ document.addEventListener("DOMContentLoaded", function() {
          fetch(url)
         .then(res => res.json())
         .then(data => {
-            console.log("----data--------------")
-            console.log(data)
             if (data.error) {
                 showIdentityAlert(data.error, "danger", 1);
                 

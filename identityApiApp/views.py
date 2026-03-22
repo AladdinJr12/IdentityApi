@@ -193,19 +193,15 @@ def verification_page(request):
             if purpose == "login" or purpose == "signup":   
                 #---adding in default contexts for new accounts----#  
                 if purpose == "signup":
-                    print("----Creating the sign up contexts---")
+
                     default_contexts = ["School", "Work", "Social"]
                     for default_context_name in default_contexts:
-                        print("defauly context name------------")
-                        print(default_context_name)
                         serializer = ContextSerializer(
                             data={"context_name": default_context_name, "linked_user": user.id}
                         )
                         if serializer.is_valid():
                             serializer.save()
 
-                #----logging in-----#
-                print("Logging in now")
                 #---removing "verify_user_id" since it has done its job---#
                 request.session.pop("verify_user_id", None)
                 
@@ -291,7 +287,7 @@ def user_logout(request):
     request.session.pop("verify_user_id", None)
 
     logout(request)
-    print("logging out now")
+    print("A user has logout")
     #---redirect back to homepage-----#
     return redirect('index')
 
@@ -302,8 +298,6 @@ def forget_password(request):
         entered_email = request.POST.get("registered_email")
         user = User.objects.filter(email=entered_email).first()
         if(user):
-            print("The user is: ", user)
-            print("success")
             #---Create otp---#
             otp_generation(request, user, "Account recovery")
 
@@ -390,9 +384,6 @@ def update_profile(request):
 
     if request.method == "POST" and form.is_valid():
         new_email = form.cleaned_data.get("email")
-        print(old_email)
-        print("new email")
-        print(new_email)
         #----checks if the email has been changed---#
         if new_email != old_email:
             #---temporary storing new email---#
@@ -420,9 +411,6 @@ def add_identity(request):
     if request.method == "POST":
         identityForm = IdentityForm(request.POST, user= request.user )
         
-        print("----------------identityForm--------------")
-        print(identityForm.errors)
-        print(identityForm)
         if identityForm.is_valid():
                 new_identity = identityForm.save(commit=False)
                 new_identity.linked_user = user
@@ -487,10 +475,6 @@ def identity_management(request):
 
     #---get all unique contexts this user made---#
     unqiue_contexts = {contextObj.id: contextObj.context_name for contextObj in contexts}
-    
-    print("---------------unique contexts----------")
-    print(unqiue_contexts)
-    print(contexts)
 
     #---Each context id is linked to → a priority identity id (which is what this map has)---#
     priority_map = {contextObj.id: contextObj.priority_identity_id for contextObj in contexts}
@@ -508,7 +492,6 @@ def identity_management(request):
     #---converting to normal dict---#
     grouped_identities = dict(grouped_identities)  
     
-    print(grouped_identities)
     return render(
         request, 
         "htmlTemplates/identityManager.html",
@@ -667,8 +650,6 @@ def add_client(request):
             client.linked_user = user
             #--Setting up secure key----#
             client.api_key = secrets.token_hex(32)  
-            print("the api key is: ---------------------")
-            print(client.api_key)
             
             client.save()
 
@@ -758,14 +739,9 @@ def get_identity_with_context(request, context_id):
     user = request.user
 
     email = request.GET.get("email")
-    print("email------------------")
-    print(email)
-
 
     #---For when the user get redirected to ApiTesting.html----#
     pending_contextID_key = request.session.get("pending_contextID_key")
-    print("pending_contextID_key")
-    print(pending_contextID_key)
 
     if not email and pending_contextID_key == None :
         return Response({"error": "Email is required"}, status=400)
@@ -843,9 +819,6 @@ def get_api_identity(request):
     api_key = request.GET.get("api_key")    
     pending_api_key = request.session.get("pending_api_key")
 
-    print("pending_api_key")
-    print(pending_api_key)
-
     if not api_key:
         return Response({"error": "API key is required"}, status=400)
     
@@ -898,7 +871,7 @@ def get_api_identity(request):
 
 #---for the handling the security levels in identitie when they are requested for in ApiTesting.html---#
 def securityVerifications(request, targeted_user, security_level, requestModel):
-    print("we are at security!----------")
+
     #----high= always need OTP-----------#
     if(security_level== "high"):
         otp_generation(request, targeted_user, "api_access")
@@ -909,7 +882,6 @@ def securityVerifications(request, targeted_user, security_level, requestModel):
 
     if(security_level== "medium"):
         verified = request.session.get("api_verified", False)
-        print("verified for medium")
         
         if request.user not in requestModel.verified_users.all():
             otp_generation(request, targeted_user, "api_access")
@@ -961,10 +933,10 @@ def add_notification(selected_user, content):
     #----Validate and save the data-------#
     if serializer.is_valid():
         serializer.save()
-        print(f"Notification created for {selected_user.username}")
         return serializer.data  #---Returns the saved notification as dict---#
     
     else:
+        #---keep for debugging---#
         print("Error encountered when creating notification: ", serializer.errors)
         return None
 
